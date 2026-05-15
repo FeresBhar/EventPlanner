@@ -2,14 +2,16 @@ const Storage = {
     KEYS: {
         FAVORITES: 'eventfinder_favorites',
         SCHEDULE: 'eventfinder_schedule',
-        THEME: 'eventfinder_theme',
         SESSION_SEARCH: 'eventfinder_session_search'
     },
 
     getFavorites() {
         try {
-            return JSON.parse(localStorage.getItem(this.KEYS.FAVORITES)) || [];
-        } catch { return []; }
+            const data = localStorage.getItem(this.KEYS.FAVORITES);
+            return data ? JSON.parse(data) : [];
+        } catch (error) {
+            return [];
+        }
     },
 
     saveFavorites(favorites) {
@@ -18,7 +20,8 @@ const Storage = {
 
     addFavorite(event) {
         const favorites = this.getFavorites();
-        if (!favorites.find(e => e.id === event.id)) {
+        const exists = favorites.find(e => e.id === event.id);
+        if (!exists) {
             favorites.push(event);
             this.saveFavorites(favorites);
             return true;
@@ -37,8 +40,11 @@ const Storage = {
 
     getSchedule() {
         try {
-            return JSON.parse(sessionStorage.getItem(this.KEYS.SCHEDULE)) || [];
-        } catch { return []; }
+            const data = sessionStorage.getItem(this.KEYS.SCHEDULE);
+            return data ? JSON.parse(data) : [];
+        } catch (error) {
+            return [];
+        }
     },
 
     saveSchedule(schedule) {
@@ -47,7 +53,8 @@ const Storage = {
 
     addToSchedule(event) {
         const schedule = this.getSchedule();
-        if (!schedule.find(e => e.id === event.id)) {
+        const exists = schedule.find(e => e.id === event.id);
+        if (!exists) {
             schedule.push(event);
             this.saveSchedule(schedule);
             return true;
@@ -64,18 +71,13 @@ const Storage = {
         return this.getSchedule().some(e => e.id === eventId);
     },
 
-    getTheme() {
-        return localStorage.getItem(this.KEYS.THEME) || 'dark';
-    },
-
-    saveTheme(theme) {
-        localStorage.setItem(this.KEYS.THEME, theme);
-    },
-
     getSessionSearch() {
         try {
-            return JSON.parse(sessionStorage.getItem(this.KEYS.SESSION_SEARCH)) || {};
-        } catch { return {}; }
+            const data = sessionStorage.getItem(this.KEYS.SESSION_SEARCH);
+            return data ? JSON.parse(data) : {};
+        } catch (error) {
+            return {};
+        }
     },
 
     saveSessionSearch(data) {

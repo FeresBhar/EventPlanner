@@ -5,16 +5,21 @@ const Countdown = {
         const diff = target - now;
 
         if (diff <= 0) {
-            return { days: 0, hours: 0, minutes: 0, seconds: 0, expired: true };
+            return { 
+                days: 0, 
+                hours: 0, 
+                minutes: 0, 
+                seconds: 0, 
+                expired: true 
+            };
         }
 
-        return {
-            days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-            hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-            minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
-            seconds: Math.floor((diff % (1000 * 60)) / 1000),
-            expired: false
-        };
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        return { days, hours, minutes, seconds, expired: false };
     },
 
     render(targetDate, containerId) {
@@ -25,7 +30,7 @@ const Countdown = {
             const time = this.calculate(targetDate);
             
             if (time.expired) {
-                container.innerHTML = '<p style="text-align:center;color:var(--danger-color);">Event has started or passed</p>';
+                container.innerHTML = '<p style="text-align:center;color:var(--danger-color);">Event passed</p>';
                 return;
             }
 

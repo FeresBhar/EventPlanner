@@ -21,34 +21,29 @@
                 <li><a href="#home" class="nav-link active">Home</a></li>
                 <li><a href="#explore" class="nav-link">Explore</a></li>
                 <li><a href="#map" class="nav-link">Map</a></li>
-                <li><a href="#schedule" class="nav-link">My Schedule</a></li>
+                <li><a href="#schedule" class="nav-link">Schedule</a></li>
                 <li><a href="#favorites" class="nav-link">Favorites</a></li>
             </ul>
-            <div class="nav-actions">
-                <button class="theme-toggle" id="themeToggle">
-                    <span class="theme-icon">🌙</span>
-                </button>
-                <button class="mobile-menu-toggle" id="mobileMenuToggle">
-                    <span></span><span></span><span></span>
-                </button>
-            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </nav>
 
     <section id="home" class="hero">
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <h1 class="hero-title">Discover Amazing Events</h1>
-            <p class="hero-subtitle">Find concerts, festivals, sports, and more near you</p>
+            <h1 class="hero-title">Discover Events</h1>
+            <p class="hero-subtitle">Find concerts, festivals, sports near you</p>
             <div class="hero-search">
-                <input type="text" id="heroSearchInput" placeholder="Search events, artists, or venues..." class="search-input">
+                <input type="text" id="heroSearchInput" placeholder="Search events..." class="search-input">
                 <input type="text" id="heroCityInput" placeholder="City" class="city-input">
-                <button class="search-btn" id="heroSearchBtn">🔍 Search</button>
+                <button class="search-btn" id="heroSearchBtn">Search</button>
             </div>
             <div class="hero-stats">
                 <div class="stat-item">
                     <span class="stat-number" id="totalEvents">0</span>
-                    <span class="stat-label">Events Found</span>
+                    <span class="stat-label">Events</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-number" id="favoritesCount">0</span>
@@ -58,15 +53,6 @@
                     <span class="stat-number" id="scheduledCount">0</span>
                     <span class="stat-label">Scheduled</span>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="featured-section">
-        <div class="container">
-            <h2 class="section-title">Featured Events</h2>
-            <div class="featured-grid" id="featuredGrid">
-                <div class="loading-spinner"></div>
             </div>
         </div>
     </section>
@@ -88,11 +74,6 @@
                         <option value="KZFzniwnSyZfZ7v7n1">Family</option>
                         <option value="KZFzniwnSyZfZ7v7nn">Comedy</option>
                     </select>
-                    <label class="toggle-label">
-                        <input type="checkbox" id="showCancelledToggle">
-                        <span class="toggle-slider"></span>
-                        Show Cancelled
-                    </label>
                     <button class="btn btn-primary" id="searchBtn">Search</button>
                     <button class="btn btn-secondary" id="clearBtn">Clear</button>
                 </div>
@@ -100,31 +81,27 @@
             <div class="events-grid" id="eventsGrid">
                 <div class="loading-spinner"></div>
             </div>
-            <div style="text-align:center;margin-top:2rem;">
-                <button class="btn btn-secondary" id="loadMoreBtn" style="display:none;padding:1rem 3rem;">
-                    Load More Events
-                </button>
-            </div>
+            <button class="btn btn-secondary" id="loadMoreBtn" style="display:none;margin:2rem auto;padding:1rem 3rem;">
+                Load More
+            </button>
         </div>
     </section>
 
     <section id="map" class="map-section">
         <div class="container">
             <h2 class="section-title">Events Map</h2>
-            <p class="section-subtitle">Showing venues from your current search results</p>
-            <p id="mapStatus" style="text-align:center;color:var(--text-secondary);margin-bottom:1rem;font-size:0.9rem;"></p>
+            <p id="mapStatus" style="text-align:center;color:var(--text-secondary);margin-bottom:1rem;"></p>
             <div id="eventsMap"></div>
         </div>
     </section>
 
     <section id="schedule" class="schedule-section">
         <div class="container">
-            <h2 class="section-title">My Schedule</h2>
+            <h2 class="section-title">Schedule</h2>
             <div class="schedule-grid" id="scheduleGrid">
                 <div class="empty-state">
                     <span class="empty-icon">📅</span>
                     <p>No events scheduled</p>
-                    <p class="empty-hint">Add events to your schedule to see them here</p>
                 </div>
             </div>
         </div>
@@ -132,12 +109,11 @@
 
     <section id="favorites" class="favorites-section">
         <div class="container">
-            <h2 class="section-title">My Favorites</h2>
+            <h2 class="section-title">Favorites</h2>
             <div class="favorites-grid" id="favoritesGrid">
                 <div class="empty-state">
                     <span class="empty-icon">❤️</span>
                     <p>No favorites yet</p>
-                    <p class="empty-hint">Start adding events to your favorites</p>
                 </div>
             </div>
         </div>
@@ -152,11 +128,9 @@
         </div>
     </div>
 
-    <div class="toast-container" id="toastContainer"></div>
-
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2024 Event & Festival Finder. Powered by Ticketmaster API</p>
+            <p>&copy; 2024 EventFinder</p>
         </div>
     </footer>
 

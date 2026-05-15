@@ -1,7 +1,6 @@
 const EventMap = {
     instance: null,
     markers: [],
-    markerCluster: null,
 
     init() {
         this.instance = L.map('eventsMap', {
@@ -17,19 +16,21 @@ const EventMap = {
     },
 
     clearMarkers() {
-        this.markers.forEach(m => this.instance.removeLayer(m));
+        this.markers.forEach(marker => {
+            this.instance.removeLayer(marker);
+        });
         this.markers = [];
     },
 
     plotEvents(events) {
         this.clearMarkers();
 
-        const valid = events.filter(e => e.lat !== null && e.lng !== null);
-        if (!valid.length) return;
+        const validEvents = events.filter(event => event.lat !== null && event.lng !== null);
+        if (!validEvents.length) return;
 
         const bounds = [];
 
-        valid.forEach(event => {
+        validEvents.forEach(event => {
             const icon = L.divIcon({
                 className: '',
                 html: `<div style="
@@ -46,18 +47,15 @@ const EventMap = {
                 popupAnchor: [0, -32]
             });
 
-            const priceText = event.priceText
-                || `<a href="${event.url}" target="_blank" style="color:#8b5cf6;">Check site</a>`;
             const venueDisplay = [event.venue, event.location].filter(Boolean).join(' · ') || 'Venue TBA';
+            const priceText = event.priceText || `<a href="${event.url}" target="_blank" style="color:#8b5cf6;">Check site</a>`;
 
             const popup = L.popup({ maxWidth: 240 }).setContent(`
                 <div class="map-popup">
-                    <img src="${event.image}" alt="${event.name}" onerror="this.style.display='none'">
                     <h4>${event.name}</h4>
                     <p>📅 ${event.date || 'Date TBA'}</p>
                     <p>📍 ${venueDisplay}</p>
                     <p>💰 ${priceText}</p>
-                    <a href="${event.url}" target="_blank">Get Tickets →</a>
                 </div>
             `);
 
@@ -74,30 +72,31 @@ const EventMap = {
 
     async loadAndPlot(query) {
         const mapStatus = document.getElementById('mapStatus');
-        if (mapStatus) mapStatus.textContent = 'Loading map data…';
+        if (mapStatus) mapStatus.textContent = 'Loading...';
 
         try {
-            const pages = [0, 1, 2, 3];
-            const results = await Promise.all(
-                pages.map(p => API.searchEvents({ ...query, size: 50, page: p })
+            const pages = [0, 1, 2];
+            const promises = pages.map(page => 
+                API.searchEvents({ ...query, size: 50, page })
                     .catch(() => ({ events: [] }))
-                )
             );
+            
+            const results = await Promise.all(promises);
+            const allEvents = results.flatMap(result => result.events);
 
-            const allRaw = results.flatMap(r => r.events);
             const seen = new Set();
-            const unique = allRaw.filter(e => {
-                if (seen.has(e.id)) return false;
-                seen.add(e.id);
+            const uniqueEvents = allEvents.filter(event => {
+                if (seen.has(event.id)) return false;
+                seen.add(event.id);
                 return true;
             });
 
-            const transformed = unique.map(e => API.transformEvent(e));
-            this.plotEvents(transformed);
+            const transformedEvents = uniqueEvents.map(event => API.transformEvent(event));
+            this.plotEvents(transformedEvents);
 
-            const withCoords = transformed.filter(e => e.lat !== null).length;
-            if (mapStatus) mapStatus.textContent = `Showing ${withCoords} event locations`;
-        } catch {
+            const withCoords = transformedEvents.filter(e => e.lat !== null).length;
+            if (mapStatus) mapStatus.textContent = `${withCoords} locations`;
+        } catch (error) {
             if (mapStatus) mapStatus.textContent = '';
         }
     }
